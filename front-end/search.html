@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>搜索结果</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .pageclass {
+            text-align: center
+        } 
+    </style>
+ </head>
+  <body>
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav_bar" aria-expanded="false">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">竹影检索系统</a>
+            </div>
+            <div class="collapse navbar-collapse" id="nav_bar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="./index.html">首页</a></li>
+                <li><a href="./about.html">关于</a></li>
+                <li class="dropdown">
+                </li>
+            </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="newinfo">
+            <!-- 这里显示搜索消息提示 -->
+        </div>
+        <div class="bodylist">
+            <!-- 这里是搜索结果 -->
+        </div>
+        <nav aria-label="Page navigation" class="pageclass">
+            <ul class="pagination">
+                <!-- 这里是页码 -->
+            </ul>
+            </nav>
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<script src="./js/jqpaginator.min.js"></script>
+<script>
+$(document).ready(function(){
+    getpage()//获得总页数
+    $(".pagination").jqPaginator({
+        totalPages: 100,
+        visiblePages: 10,
+        currentPage: 1,
+        first: '<li class="first"><a href="javascript:void(0);">首页<\/a><\/li>',
+        prev: '<li class="prev"><a href="javascript:void(0);">上页<\/a><\/li>',
+        next: '<li class="next"><a href="javascript:void(0);">下页<\/a><\/li>',
+        last: '<li class="last"><a href="javascript:void(0);">末页<\/a><\/li>',
+        page: '<li class="page"><a href="javascript:void(0);">{{page}}<\/a><\/li>',
+        onPageChange: function (n) {
+            getbooklist(n)
+        }
+    });
+
+    function getid(paras){ 
+        var url = location.href; 
+        var paraString = url.substring(url.indexOf("?")+1,url.length).split("&");
+        var paraObj = {} 
+        for (i=0; j=paraString[i]; i++){ 
+            paraObj[j.substring(0,j.indexOf("=")).toLowerCase()] = j.substring(j.indexOf("=")+1,j.length); 
+        } 
+        var returnValue = paraObj[paras.toLowerCase()]; 
+        if(typeof(returnValue)=="undefined"){ 
+            return ""; 
+        }else{ 
+            return returnValue; 
+        } 
+    }
+    
+    function getbooklist(page){
+        var strSearchType = getid("strSearchType");//strSearchType：搜索类型
+        var match_flag = getid("match_flag");//match_flag：匹配类型
+        var strText = getid("strText");//strText：搜索内容
+        var doctype = getid("doctype");//doctype：文档类型
+        var with_ebook = getid("with_ebook");//with_ebook：显示电子书刊
+        var ip = "http://lib.3gxk.net:8080/search/?"
+        var ipbody = "strSearchType=" + strSearchType + "&match_flag=" + match_flag + "&strText=" + strText + "&doctype=" + doctype + "&with_ebook=" + with_ebook + "&page=" + page
+        var url = ip + ipbody
+        $(".bodylist").empty()
+        $(' <div class="alert alert-success" role="alert">加载中数据.....</div>').appendTo($(".newinfo"))
+        $.getJSON(url,function(json){
+            if(json.status == '1'){
+                $(".alert-success").remove()
+                $.each(json.bookslist, function(i, field){
+                    $('<div class="panel panel-info"><div class="panel-heading booktitle">' + json.bookslist[i].id + '.<a href = "./info.html?id=' + json.bookslist[i].url+ '">' + json.bookslist[i].title + '</a>【' +json.bookslist[i].type +'】<br/>责任者：' + json.bookslist[i].responsible +
+                            '</div><div class="panel-body">"出版发行项：' + json.bookslist[i].publishing +  '<br/>' + json.bookslist[i].total + '|' + json.bookslist[i].available + '<br/>索书号：' + json.bookslist[i].number + '</div></div>').appendTo($(".bodylist"))
+                });
+            }else{
+                $('<div class="alert alert-danger" role="alert">暂没有搜索结果！</div>').appendTo($(".bodylist"))
+            }
+
+        });
+    }
+
+    function getpage(){
+        var strSearchType = getid("strSearchType");//strSearchType：搜索类型
+        var match_flag = getid("match_flag");//match_flag：匹配类型
+        var strText = getid("strText");//strText：搜索内容
+        var doctype = getid("doctype");//doctype：文档类型
+        var with_ebook = getid("with_ebook");//with_ebook：显示电子书刊
+        var ip = "http://lib.3gxk.net:8080/search/?"
+        var ipbody = "strSearchType=" + strSearchType + "&match_flag=" + match_flag + "&strText=" + strText + "&doctype=" + doctype + "&with_ebook=" + with_ebook + "&page=1"
+        var url = ip + ipbody
+        $.getJSON(url,function(json){
+            $('.pagination').jqPaginator('option', {
+            totalPages: parseInt(json.page)//异步获得页码
+        });
+        });
+    }    
+});
+</script>
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan style='display:none;' id='cnzz_stat_icon_1275802891'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s5.cnzz.com/z_stat.php%3Fid%3D1275802891%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+  </body>
+</html>

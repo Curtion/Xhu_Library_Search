@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>竹影检索系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav_bar" aria-expanded="false">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">竹影检索系统</a>
+            </div>
+            <div class="collapse navbar-collapse" id="nav_bar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="./index.html">首页</a></li>
+                <li><a href="./about.html">关于</a></li>
+                <li class="dropdown">
+                </li>
+            </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="jumbotron">
+            <h1>竹影图书检索系统</h1>
+            <p>本系统仅限于搜索西华大学图书馆馆藏信息，请勿用于非法用途！</p>
+        </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                        <div class='form-inline'>
+                            <select class="form-control" id="strSearchType">
+                                <option disabled selected>搜索方式</option>
+                                <option value="title">题名</option>
+                                <option value="author">责任者</option>
+                                <option value="keyword">主题词</option>
+                                <option value="isbn">ISBN/ISSN</option>
+                                <option value="asordno">订购号</option>
+                                <option value="coden">分类号</option>
+                                <option value="callno">索书号</option>
+                                <option value="publisher">出版社</option>
+                                <option value="series">丛书名</option>
+                                <option value="tpinyin">题名拼音</option>
+                                <option value="apinyin">责任者拼音</option>
+                            </select>
+                            <select class="form-control" id="match_flag">
+                                <option disabled selected>匹配类型</option>
+                                <option value="forward">前方一致</option>
+                                <option value="full">完全匹配</option>
+                                <option value="any">任意匹配</option>
+                            </select>
+                            <select class="form-control" id="doctype">
+                                <option disabled selected>搜索范围</option>
+                                <option value="ALL">所有书刊</option>
+                                <option value="01">中文图书</option>
+                                <option value="02">西文图书</option>
+                                <option value="11">中文期刊</option>
+                                <option value="12">西文期刊</option>
+                            </select>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+                <textarea class="form-control" rows="3" placeholder="请输入内容" style="resize:none;" id="strText"></textarea>
+                <hr>
+                <div class='form-inline'>
+                    <!-- <div class="checkbox col-xs-6">
+                        <label>
+                        <input type="checkbox" id="with_ebook">显示电子书刊
+                        </label>
+                    </div> -->
+                    <button type="button" class="btn btn-primary btn-lg btn-block" id="up">搜索</button>
+                </div>
+            </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            // $("#with_ebook").attr("checked","checked")//默认勾选电子书刊
+            $("#strSearchType option:nth-child(2)").prop("selected", 'selected')//默认选择题名搜索
+            $("#match_flag option:nth-child(2)").prop("selected", 'selected')//默认选择前方一致
+            $("#doctype option:nth-child(2)").prop("selected", 'selected')//默认选择所以书刊
+            $("#up").click(function(){
+                var strSearchType = $("#strSearchType").val()
+                var match_flag = $("#match_flag").val()
+                var strText = $("#strText").val()
+                var doctype = $("#doctype").val()
+                if($('#with_ebook').is(':checked')) {
+                    var with_ebook = "on"
+                }else{
+                    var with_ebook = "off"
+                }
+                var url = "strSearchType=" + strSearchType + "&match_flag=" + match_flag + "&strText=" + strText + "&doctype=" + doctype + "&with_ebook=off"
+                window.location.href = "./search.html?" + url
+            });
+        });
+    </script>
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan style='display:none;' id='cnzz_stat_icon_1275802891'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s5.cnzz.com/z_stat.php%3Fid%3D1275802891%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+ 
+  </body>
+</html>

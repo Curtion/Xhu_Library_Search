@@ -1,0 +1,38 @@
+﻿//获取搜索结果
+    /*
+        strSearchType：搜索类型
+            title：题名
+            author：责任者
+            keyword：主题词
+            isbn：ISBN/ISSN
+            asordno：订购号
+            coden：分类号
+            callno：索书号
+            publisher：出版社
+            series：丛书名
+            tpinyin：题名拼音
+            apinyin：责任者拼音
+    */
+    /*
+        match_flag：匹配类型
+            forward：前方一致
+            full：完全匹配
+            any：任意匹配
+    */
+    /*
+        strText：搜索内容
+        进行url编码
+    */
+    /*
+        doctype：文档类型
+            所有书刊 doctype=ALL
+            中文图书 doctype=01
+            西文图书 doctype=02
+            中文期刊 doctype=11
+            西文期刊 doctype=12
+    */
+    /*
+        with_ebook：显示电子书刊
+            on：显示
+            off：不显示
+    */
